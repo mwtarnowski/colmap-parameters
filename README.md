@@ -262,8 +262,6 @@ Path to a folder with reconstruction snapshots during incremental reconstruction
 **Mapper.fix_existing_images** (default: 0)\
 If reconstruction is provided as input, fix the existing image poses.
 
-#### Incremental Mapper parameters. Class that provides all functionality for the incremental reconstruction procedure.
-
 **Mapper.init_min_num_inliers** (default: 100)\
 Minimum number of inliers for initial image pair.
 
@@ -299,8 +297,6 @@ Maximum number of trials to register an image.
 
 **Mapper.local_ba_min_tri_angle** (default: 6)\
 Minimum triangulation for images to be chosen in local bundle adjustment.
-
-#### Incremental Triangulator. Class that triangulates points during the incremental reconstruction.
 
 **Mapper.tri_max_transitivity** (default: 1)\
 Maximum transitivity to search for correspondences.
@@ -531,5 +527,40 @@ This floating point values specifies the value for mesh trimming. The subset of 
 
 **PoissonMeshing.num_threads** (default: -1)\
 The number of threads used for the Poisson reconstruction.
+
+</details>
+
+
+## Bundle adjuster settings
+**colmap bundle_adjuster**: Run global bundle adjustment on a reconstructed scene, e.g., when a refinement of the intrinsics is needed or after running the `image_registrator`.
+<details>
+<summary>Show the list of parameters</summary>
+
+**BundleAdjustment.refine_focal_length** (default: 1)\
+**BundleAdjustment.refine_principal_point** (default: 0)\
+**BundleAdjustment.refine_extra_params** (default: 1)\
+Whether to optimize intrinsic parameters.
+
+**BundleAdjustment.refine_extrinsics** (default: 1)\
+Whether to optimize extrinsic parameters.
+
+#### [Ceres](http://ceres-solver.org) related settings
+`Solver::Options` controls the overall behavior of the solver.
+See: [Solving Non-linear Least Squares](http://ceres-solver.org/nnls_solving.html#_CPPv4N5ceres6Solver7OptionsE)
+
+**BundleAdjustment.max_num_iterations** (default: 100)\
+See: [Solver::Options::max_num_iterations](http://ceres-solver.org/nnls_solving.html#_CPPv4N5ceres6Solver7Options18max_num_iterationsE)
+
+**BundleAdjustment.max_linear_solver_iterations** (default: 200)\
+See: [Solver::Options::max_linear_solver_iterations](http://ceres-solver.org/nnls_solving.html#_CPPv4N5ceres6Solver7Options28max_linear_solver_iterationsE)
+
+**BundleAdjustment.function_tolerance** (default: 0)\
+See: [Solver::Options::function_tolerance](http://ceres-solver.org/nnls_solving.html#_CPPv4N5ceres6Solver7Options18function_toleranceE)
+
+**BundleAdjustment.gradient_tolerance** (default: 0)\
+See: [Solver::Options::gradient_tolerance](http://ceres-solver.org/nnls_solving.html#_CPPv4N5ceres6Solver7Options18gradient_toleranceE)
+
+**BundleAdjustment.parameter_tolerance** (default: 0)\
+See: [Solver::Options::parameter_tolerance](http://ceres-solver.org/nnls_solving.html#_CPPv4N5ceres6Solver7Options19parameter_toleranceE)
 
 </details>
