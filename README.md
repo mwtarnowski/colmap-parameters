@@ -33,6 +33,11 @@ Root path to folder which contains the images.
 **image_list_path**\
 Optional list of images to read. The list must contain the relative path of the images with respect to the image_path.
 
+**descriptor_normalization** (default: `l1_root`)\
+Possible values: `l1_root`, `l2`\
+Whether to use L1 normalization of each descriptor followed by element-wise square rooting (RootSIFT) or standard L2 normalization.\
+RootSIFT descriptors are usually better than standard SIFT. Proposed in [Three things everyone should know to improve object retrieval](https://www.robots.ox.ac.uk/~vgg/publications/2012/Arandjelovic12/arandjelovic12.pdf), R. Arandjelovic and A. Zisserman, CVPR 2012.
+
 **ImageReader.mask_path**\
 Optional root path to folder which contains image masks. For a given image, the corresponding mask must have the same sub-path below this root as the image has below image_path. The filename must be equal, aside from the added extension `.png`. For example, for an image `image_path/abc/012.jpg`, the mask would be `mask_path/abc/012.jpg.png`. No features will be extracted in regions where the mask image is black (pixel intensity value 0 in grayscale).
 
@@ -164,6 +169,12 @@ Whether to attempt to estimate multiple geometric models per image pair.
 
 **SiftMatching.guided_matching** (default: 0)\
 Whether to perform guided matching, if geometric verification succeeds.
+
+**SiftMatching.planar_scene** (default: 0)\
+Force Homography use for Two-view Geometry (can help for planar scenes).
+
+**SiftMatching.compute_relative_pose** (default: 0)\
+Whether to estimate the relative pose between the two images and save them to the database.
 
 **ExhaustiveMatching.block_size** (default: 50)\
 Block size, i.e. number of images to simultaneously load into memory.
@@ -491,6 +502,9 @@ Unify input points into one cell in the Delaunay triangulation that fall within 
 
 **DelaunayMeshing.max_depth_dist** (default: 0.05)\
 Maximum relative depth difference between input point and a vertex of an existing cell in the Delaunay triangulation, otherwise a new vertex is created in the triangulation.
+
+**DelaunayMeshing.visibility_sigma** (default: 3)\
+The standard deviation of wrt. the number of images seen by each point. Increasing this value decreases the influence of points seen in few images.
 
 **DelaunayMeshing.distance_sigma_factor** (default: 1)\
 The factor that is applied to the computed distance sigma, which is automatically computed as the 25th percentile of edge lengths. A higher value will increase the smoothness of the surface.
