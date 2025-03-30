@@ -30,6 +30,10 @@ Read more: [Feature Detection and Extraction](https://colmap.github.io/tutorial.
 **image_path**\
 Root path to folder which contains the images.
 
+**camera_mode** (default: -1)\
+Possible values: -1 (UNSET), 0 (AUTO), 1 (SINGLE), 2 (PER_FOLDER), 3 (PER_IMAGE)\
+Optional way to ensure that the camera flags of `ImageReader` are set in an exclusive and unambiguous way.
+
 **image_list_path**\
 Optional list of images to read. The list must contain the relative path of the images with respect to the image_path.
 
@@ -146,35 +150,32 @@ Maximum distance to best match.
 **SiftMatching.cross_check** (default: 1)\
 Whether to enable cross checking in matching.
 
-**SiftMatching.max_error** (default: 4)\
-Maximum epipolar error in pixels for geometric verification.
+**SiftMatching.guided_matching** (default: 0)\
+Whether to perform guided matching, if geometric verification succeeds.
 
 **SiftMatching.max_num_matches** (default: 32768)\
 Maximum number of matches.
 
-**SiftMatching.confidence** (default: 0.999)\
-Confidence threshold for geometric verification.
-
-**SiftMatching.max_num_trials** (default: 10000)\
-Maximum number of RANSAC iterations. Note that this option overrules the `SiftMatching.min_inlier_ratio` option.
-
-**SiftMatching.min_inlier_ratio** (default: 0.25)\
-A priori assumed minimum inlier ratio, which determines the maximum number of iterations.
-
-**SiftMatching.min_num_inliers** (default: 15)\
+**TwoViewGeometry.min_num_inliers** (default: 15)\
 Minimum number of inliers for an image pair to be considered as geometrically verified.
 
-**SiftMatching.multiple_models** (default: 0)\
+**TwoViewGeometry.multiple_models** (default: 0)\
 Whether to attempt to estimate multiple geometric models per image pair.
 
-**SiftMatching.guided_matching** (default: 0)\
-Whether to perform guided matching, if geometric verification succeeds.
-
-**SiftMatching.planar_scene** (default: 0)\
-Force Homography use for Two-view Geometry (can help for planar scenes).
-
-**SiftMatching.compute_relative_pose** (default: 0)\
+**TwoViewGeometry.compute_relative_pose** (default: 0)\
 Whether to estimate the relative pose between the two images and save them to the database.
+
+**TwoViewGeometry.max_error** (default: 4)\
+Maximum epipolar error in pixels for geometric verification.
+
+**TwoViewGeometry.confidence** (default: 0.999)\
+Confidence threshold for geometric verification.
+
+**TwoViewGeometry.max_num_trials** (default: 10000)\
+Maximum number of RANSAC iterations. Note that this option overrules the `TwoViewGeometry.min_inlier_ratio` option.
+
+**TwoViewGeometry.min_inlier_ratio** (default: 0.25)\
+A priori assumed minimum inlier ratio, which determines the maximum number of iterations.
 
 **ExhaustiveMatching.block_size** (default: 50)\
 Block size, i.e. number of images to simultaneously load into memory.
@@ -228,9 +229,6 @@ Thresholds for filtering images with degenerate intrinsics.
 **Mapper.ba_refine_extra_params** (default: 1)\
 Which intrinsic parameters to optimize during the reconstruction.
 
-**Mapper.ba_min_num_residuals_for_multi_threading** (default: 50000)\
-The minimum number of residuals per bundle adjustment problem to enable multi-threading solving of the problems.
-
 **Mapper.ba_local_num_images** (default: 6)\
 The number of images to optimize in local bundle adjustment.
 
@@ -239,13 +237,6 @@ Ceres solver function tolerance for local bundle adjustment
 
 **Mapper.ba_local_max_num_iterations** (default: 25)\
 The maximum number of local bundle adjustment iterations.
-
-**Mapper.ba_global_use_pba** (default: 0)\
-Whether to use PBA (Parralel Bundle Adjustment) in global bundle adjustment.
-See: https://grail.cs.washington.edu/projects/mcba/, https://github.com/cbalint13/pba
-
-**Mapper.ba_global_pba_gpu_index** (default: -1)\
-The GPU index for PBA bundle adjustment.
 
 **Mapper.ba_global_images_ratio** (default: 1.1)\
 **Mapper.ba_global_points_ratio** (default: 1.1)\
@@ -264,6 +255,15 @@ The maximum number of global bundle adjustment iterations.
 **Mapper.ba_local_max_refinements** (default: 2)\
 **Mapper.ba_local_max_refinement_change** (default: 0.001)\
 The thresholds for iterative bundle adjustment refinements.
+
+**Mapper.ba_use_gpu** (default: 0)\
+Whether to use Ceres' CUDA linear algebra library, if available.
+
+**Mapper.ba_gpu_index** (default: -1)\
+Index of CUDA GPU to use for BA, if available.
+
+**Mapper.ba_min_num_residuals_for_cpu_multi_threading** (default: 50000)\
+The minimum number of residuals per bundle adjustment problem to enable multi-threading solving of the problems.
 
 **Mapper.snapshot_path**\
 Path to a folder with reconstruction snapshots during incremental reconstruction. Snapshots will be saved according to the specified frequency of registered images.
@@ -557,6 +557,26 @@ Whether to optimize intrinsic parameters.
 
 **BundleAdjustment.refine_extrinsics** (default: 1)\
 Whether to optimize extrinsic parameters.
+
+**BundleAdjustment.use_gpu** (default: 0)\
+Whether to use Ceres' CUDA linear algebra library, if available.
+
+**BundleAdjustment.gpu_index** (default: -1)\
+Index of CUDA GPU to use for BA, if available.
+
+**BundleAdjustment.min_num_images_gpu_solver** (default: 50)\
+Minimum number of images to use the GPU solver.
+
+**BundleAdjustment.min_num_residuals_for_cpu_multi_threading** (default: 50000)\
+The minimum number of residuals per bundle adjustment problem to enable multi-threading solving of the problems.
+
+**BundleAdjustment.max_num_images_direct_dense_cpu_solver** (default: 50)\
+**BundleAdjustment.max_num_images_direct_sparse_cpu_solver** (default: 1000)\
+Thresholds to switch between direct, sparse, and iterative CPU solvers.
+
+**BundleAdjustment.max_num_images_direct_dense_gpu_solver** (default: 200)\
+**BundleAdjustment.max_num_images_direct_sparse_gpu_solver** (default: 4000)\
+Thresholds to switch between direct, sparse, and iterative GPU solvers.
 
 #### [Ceres](http://ceres-solver.org) related settings
 `Solver::Options` controls the overall behavior of the solver.
